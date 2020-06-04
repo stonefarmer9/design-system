@@ -22,7 +22,12 @@ stories.add('Vanilla', () => {
     >
       <TextInput className="is-valid" name="colour" label="My Label" />
       <TextInput name="name" label="Name" />
-      <TextInput name="hero" label="Hero" startAdornment={<Search />} />
+      <TextInput
+        name="hero"
+        label="OMG IMZ AUTOFOCUZED!"
+        startAdornment={<Search />}
+        autoFocus
+      />
       <TextInput name="fruit" label="Fruit" endAdornment={<Search />} />
       <button type="submit">Submit</button>
     </form>
