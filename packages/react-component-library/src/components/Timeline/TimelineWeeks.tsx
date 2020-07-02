@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { format, differenceInDays } from 'date-fns'
+import { format, differenceInDays, isAfter } from 'date-fns'
 
 import { DATE_WEEK_FORMAT } from './constants'
 import { formatPx, getKey, isOdd } from './helpers'
@@ -68,42 +68,64 @@ function renderDefault(
 
 export const TimelineWeeks: React.FC<TimelineWeeksProps> = ({ render }) => {
   return (
-    <div className="timeline__weeks" data-testid="timeline-weeks">
-      <TimelineContext.Consumer>
-        {({
-          state: {
-            months,
-            weeks,
-            options: { dayWidth },
-          },
-        }) => {
-          return weeks.map(({ startDate }, index) => {
-            const diff = differenceInDays(
-              new Date(startDate),
-              new Date(months[0].startDate)
-            )
+    <TimelineContext.Consumer>
+      {({
+        state: {
+          months,
+          weeks,
+          endDate: timelineEndDate,
+          options: { dayWidth },
+        },
+      }) => {
+        const wrapperStyles = timelineEndDate
+          ? {
+              width: formatPx(
+                dayWidth,
+                differenceInDays(timelineEndDate, months[0].startDate) + 1
+              ),
+              overflow: 'hidden',
+            }
+          : null
 
-            const offsetPx = formatPx(dayWidth, diff < 0 ? -Math.abs(diff) : 0)
-            const widthPx = formatPx(dayWidth, 7)
+        return (
+          <div
+            className="timeline__weeks"
+            data-testid="timeline-weeks"
+            style={wrapperStyles}
+          >
+            {weeks.map(({ startDate }, index) => {
+              if (isAfter(startDate, timelineEndDate)) return null
 
-            const isOddNumber = isOdd(index)
+              const diff = differenceInDays(
+                new Date(startDate),
+                new Date(months[0].startDate)
+              )
 
-            const args = [
-              index,
-              isOddNumber,
-              offsetPx,
-              widthPx,
-              dayWidth,
-              7,
-              startDate,
-            ]
+              const offsetPx = formatPx(
+                dayWidth,
+                diff < 0 ? -Math.abs(diff) : 0
+              )
+              const widthPx = formatPx(dayWidth, 7)
 
-            // @ts-ignore
-            return render ? render(...args) : renderDefault(...args)
-          })
-        }}
-      </TimelineContext.Consumer>
-    </div>
+              const isOddNumber = isOdd(index)
+
+              const args = [
+                index,
+                isOddNumber,
+                offsetPx,
+                widthPx,
+                dayWidth,
+                7,
+                startDate,
+              ]
+
+              // @ts-ignore
+              return render ? render(...args) : renderDefault(...args)
+            })}
+          </div>
+        )
+      }}
+    </TimelineContext.Consumer>
   )
 }
 

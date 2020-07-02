@@ -47,6 +47,7 @@ export interface TimelineProps extends ComponentWithClass {
   children: timelineChildrenType | timelineChildrenType[]
   dayWidth?: number
   startDate?: Date
+  endDate?: Date
   today?: Date
   range?: number
 }
@@ -95,6 +96,7 @@ export const Timeline: React.FC<TimelineProps> = ({
   children,
   dayWidth = DEFAULTS.DAY_WIDTH,
   startDate,
+  endDate,
   today,
   range,
 }) => {
@@ -128,7 +130,12 @@ export const Timeline: React.FC<TimelineProps> = ({
   })
 
   return (
-    <TimelineProvider startDate={startDate} today={today} options={options}>
+    <TimelineProvider
+      startDate={startDate}
+      endDate={endDate}
+      today={today}
+      options={options}
+    >
       <article className="timeline">
         {rootChildren}
         <div className="timeline__inner">

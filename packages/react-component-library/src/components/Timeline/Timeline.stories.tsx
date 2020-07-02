@@ -18,7 +18,11 @@ import {
 const stories = storiesOf('Timeline', module)
 
 stories.add('No data', () => (
-  <Timeline startDate={new Date(2020, 4, 0)} today={new Date(2020, 3, 15)}>
+  <Timeline
+    startDate={new Date(2020, 0, 5)}
+    endDate={new Date(2020, 1, 15)}
+    today={new Date(2020, 0, 15)}
+  >
     <TimelineTodayMarker />
     <TimelineMonths />
     <TimelineWeeks />
