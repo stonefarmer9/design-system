@@ -78,37 +78,59 @@ export const TimelineRows: React.FC<TimelineRowsProps> = ({
   return (
     <main className={mainClasses}>
       {hasChildren && (
-        <div className={rowClasses} data-testid="timeline-columns">
-          <TimelineContext.Consumer>
-            {({
-              state: {
-                months,
-                weeks,
-                options: { dayWidth },
-              },
-            }) => {
-              return weeks.map(({ startDate }, index) => {
-                const diff = differenceInDays(
-                  new Date(startDate),
-                  new Date(months[0].startDate)
-                )
+        <TimelineContext.Consumer>
+          {({
+            state: {
+              months,
+              weeks,
+              endDate: timelineEndDate,
+              options: { dayWidth },
+            },
+          }) => {
+            const wrapperStyles = timelineEndDate
+              ? {
+                  width: formatPx(
+                    dayWidth,
+                    differenceInDays(timelineEndDate, months[0].startDate) + 1
+                  ),
+                  overflow: 'hidden',
+                }
+              : null
 
-                const offsetPx = formatPx(
-                  dayWidth,
-                  diff < 0 ? -Math.abs(diff) : 0
-                )
+            return (
+              <div
+                className={rowClasses}
+                style={wrapperStyles}
+                data-testid="timeline-columns"
+              >
+                {weeks.map(({ startDate }, index) => {
+                  const diff = differenceInDays(
+                    new Date(startDate),
+                    new Date(months[0].startDate)
+                  )
 
-                const widthPx = formatPx(dayWidth, 7)
+                  const offsetPx = formatPx(
+                    dayWidth,
+                    diff < 0 ? -Math.abs(diff) : 0
+                  )
 
-                const isOddNumber = isOdd(index)
+                  const widthPx = formatPx(dayWidth, 7)
 
-                return renderColumns
-                  ? renderColumns(index, isOddNumber, offsetPx, widthPx)
-                  : renderDefaultColumns(index, isOddNumber, offsetPx, widthPx)
-              })
-            }}
-          </TimelineContext.Consumer>
-        </div>
+                  const isOddNumber = isOdd(index)
+
+                  return renderColumns
+                    ? renderColumns(index, isOddNumber, offsetPx, widthPx)
+                    : renderDefaultColumns(
+                        index,
+                        isOddNumber,
+                        offsetPx,
+                        widthPx
+                      )
+                })}
+              </div>
+            )
+          }}
+        </TimelineContext.Consumer>
       )}
 
       {hasChildren ? childrenWithKey : noData}
