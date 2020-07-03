@@ -265,7 +265,7 @@ stories.add('With custom columns', () => {
       <TimelineMonths />
       <TimelineWeeks />
       <TimelineDays />
-      <TimelineRows renderColumns={CustomTimelineColumn}>
+      <TimelineRows render={CustomTimelineColumn}>
         <TimelineRow name="Row 1">
           <TimelineEvents>
             <TimelineEvent

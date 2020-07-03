@@ -11,7 +11,7 @@ export interface TimelineRowsProps extends ComponentWithClass {
   children:
     | React.ReactElement<TimelineRowProps>
     | React.ReactElement<TimelineRowProps>[]
-  renderColumns?: (
+  render?: (
     index: number,
     isOddNumber: boolean,
     offsetPx: string,
@@ -25,7 +25,7 @@ const noData = (
   </span>
 )
 
-function renderDefaultColumns(
+function renderDefault(
   index: number,
   isOddNumber: boolean,
   offsetPx: string,
@@ -54,7 +54,7 @@ function renderDefaultColumns(
 export const TimelineRows: React.FC<TimelineRowsProps> = ({
   children,
   className,
-  renderColumns,
+  render,
 }) => {
   const childrenWithKey = React.Children.map(
     children,
@@ -68,11 +68,11 @@ export const TimelineRows: React.FC<TimelineRowsProps> = ({
   const hasChildren = childrenWithKey && childrenWithKey.length
 
   const mainClasses = classNames('timeline__main', className, {
-    'timeline__main--renderDefault': !renderColumns,
+    'timeline__main--renderDefault': !render,
   })
 
   const rowClasses = classNames('timeline__row-weeks', {
-    'timeline__row-weeks--renderDefault': !renderColumns,
+    'timeline__row-weeks--renderDefault': !render,
   })
 
   return (
@@ -118,14 +118,9 @@ export const TimelineRows: React.FC<TimelineRowsProps> = ({
 
                   const isOddNumber = isOdd(index)
 
-                  return renderColumns
-                    ? renderColumns(index, isOddNumber, offsetPx, widthPx)
-                    : renderDefaultColumns(
-                        index,
-                        isOddNumber,
-                        offsetPx,
-                        widthPx
-                      )
+                  return render
+                    ? render(index, isOddNumber, offsetPx, widthPx)
+                    : renderDefault(index, isOddNumber, offsetPx, widthPx)
                 })}
               </div>
             )
