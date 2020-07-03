@@ -18,8 +18,18 @@ import {
 const stories = storiesOf('Timeline', module)
 
 stories.add('No data', () => (
+  <Timeline startDate={new Date(2020, 0, 1)} today={new Date(2020, 0, 15)}>
+    <TimelineTodayMarker />
+    <TimelineMonths />
+    <TimelineWeeks />
+    <TimelineDays />
+    <TimelineRows>{}</TimelineRows>
+  </Timeline>
+))
+
+stories.add('Bound by fixed dates', () => (
   <Timeline
-    startDate={new Date(2020, 0, 5)}
+    startDate={new Date(2020, 0, 13)}
     endDate={new Date(2020, 1, 15)}
     today={new Date(2020, 0, 15)}
   >
@@ -63,11 +73,7 @@ stories.add('With data', () => (
 ))
 
 stories.add('With sidebar', () => (
-  <Timeline
-    startDate={new Date(2020, 3, 1)}
-    endDate={new Date(2020, 5, 15)}
-    today={new Date(2020, 3, 15)}
-  >
+  <Timeline startDate={new Date(2020, 3, 1)} today={new Date(2020, 3, 15)}>
     <TimelineSide />
     <TimelineTodayMarker />
     <TimelineMonths />

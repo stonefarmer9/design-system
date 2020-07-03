@@ -110,17 +110,14 @@ export function reducer(
   state: TimelineState,
   action: TimelineAction
 ): TimelineState | never {
-  const { startDate, endDate, options: { rangeInMonths } } = state
-
-  const range = endDate
-    ? calcRange(startDate, endDate)
-    : rangeInMonths
+  const { startDate, options: { rangeInMonths: range } } = state
 
   switch (action.type) {
     case TIMELINE_ACTIONS.GET_NEXT:
       return {
         ...state,
         startDate: addMonths(startDate, range),
+        endDate: null,
         months: getMonths(addMonths(startDate, range), range),
         weeks: getWeeks(addMonths(startDate, range), range),
         days: getDays(addMonths(startDate, range), range)
@@ -129,6 +126,7 @@ export function reducer(
       return {
         ...state,
         startDate: subMonths(startDate, range),
+        endDate: null,
         months: getMonths(subMonths(startDate, range), range),
         weeks: getWeeks(subMonths(startDate, range), range),
         days: getDays(subMonths(startDate, range), range)
